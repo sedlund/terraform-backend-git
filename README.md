@@ -22,6 +22,7 @@ Git as Terraform backend? Seriously? I know, might sound like a stupid idea at f
     - [Git Credentials](#git-credentials)
     - [State Encryption](#state-encryption)
       - [`sops`](#sops)
+        - [Age](#age)
         - [PGP](#pgp)
         - [AWS KMS](#aws-kms)
         - [GCP KMS](#gcp-kms)
@@ -220,6 +221,7 @@ To enable encryption set the env var `TF_BACKEND_HTTP_ENCRYPTION_PROVIDER` to on
 
 We are using [`sops`](https://github.com/mozilla/sops) as encryption abstraction. `sops` supports many different encryption backends, but unfortunately it does not provide one stop API for all of them, so on our side we should define configuration and create binding for each. At the moment, we have following bindings for `sops` backends:
 
+- Age
 - PGP
 - AWS KMS
 - GCP KMS
@@ -230,6 +232,10 @@ Before we integrated with `sops` - we had a basic AES256 encryption via static p
 #### `sops`
 
 `sops` supports [Shamir's Secret Sharing](https://github.com/mozilla/sops#214key-groups). You can configure multiple backends at once - each will be used to encrypt a part of the key. You can set `TF_BACKEND_HTTP_SOPS_SHAMIR_THRESHOLD` if you want to use a specific threshold - by default, all keys used for encryption will be required for decryption.
+
+##### Age
+
+Use `TF_BACKEND_HTTP_SOPS_AGE_RECIPIENTS` to provide comma separated list of Age public keys. Read [Encrypting using age](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age) for further details.
 
 ##### PGP
 
